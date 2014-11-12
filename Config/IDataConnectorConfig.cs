@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace OXStack.Config
+﻿namespace OXStack.Config
 {
     /// <summary>
     /// Standard database config

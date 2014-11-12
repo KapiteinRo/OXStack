@@ -1,17 +1,16 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("OXStack")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("See http://git.io/dDLzHA")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Kana Inc.")]
+[assembly: AssemblyCompany("Royi Eltink")]
 [assembly: AssemblyProduct("OXStack")]
-[assembly: AssemblyCopyright("Copyright © Kana Inc. 2014")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © Royi Eltink 2014")]
+[assembly: AssemblyTrademark("MIT License")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

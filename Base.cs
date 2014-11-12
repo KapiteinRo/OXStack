@@ -1,5 +1,4 @@
-﻿using System;
-using OXStack.Data;
+﻿using OXStack.Data;
 using OXStack.Config;
 
 namespace OXStack
