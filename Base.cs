@@ -1,4 +1,5 @@
-﻿using OXStack.Data;
+﻿using System.Xml.Serialization;
+using OXStack.Data;
 using OXStack.Config;
 
 namespace OXStack
@@ -12,6 +13,7 @@ namespace OXStack
         /// <summary>
         /// DataConnector class
         /// </summary>
+        [XmlIgnore]
         public DataConnector DataConnector { get { return _dc ?? (_dc = new DataConnector()); } set { _dc = value; } }
 
         // caching..
@@ -19,6 +21,7 @@ namespace OXStack
         /// <summary>
         /// Cache. 4 hours standard
         /// </summary>
+        [XmlIgnore]
         public CachingHelper Cache { get { return _ch ?? (_ch = new CachingHelper(60 * 4)); } }
 
         // config
@@ -26,6 +29,7 @@ namespace OXStack
         /// <summary>
         /// Configuration
         /// </summary>
+        [XmlIgnore]
         public OXConfig Config { get { return _cfg ?? (_cfg = new OXConfig()); } }
 
         /// <summary>

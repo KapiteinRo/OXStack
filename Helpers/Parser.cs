@@ -312,6 +312,8 @@ namespace OXStack.Helpers
             XmlDocument xDoc = new XmlDocument();
             try
             {
+                if (!sXml.Trim().StartsWith("<?xml"))
+                    sXml = "<?xml version=\"1.0\"?>\r\n" + sXml;
                 xDoc.LoadXml(sXml);
                 XmlSerializer xSer = new XmlSerializer(typeof(T));
                 return (T)xSer.Deserialize(new XmlNodeReader(xDoc.DocumentElement));

@@ -112,7 +112,7 @@ namespace OXStack.RT
         /// <returns></returns>
         private IEnumerable<string> FetchColumnNames(DataRow dr)
         {
-            foreach (DataColumn c in dr.Table.Columns) yield return c.ColumnName;
+            foreach (DataColumn c in dr.Table.Columns) yield return c.ColumnName.ToLower();
         }
     }
 
