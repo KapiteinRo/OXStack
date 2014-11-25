@@ -65,11 +65,26 @@ namespace OXStack.RT
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sQuery"></param>
+        /// <param name="bUseCache"></param>
         /// <returns></returns>
-        public IEnumerable<T> Fill<T>(string sQuery) where T : BaseRTEntity
+        public IEnumerable<T> Fill<T>(string sQuery, bool bUseCache = false) where T : BaseRTEntity
         {
             // fetch the datatable
-            DataTable dt = this.DataConnector.SelectDataTable(sQuery, true);
+            DataTable dt = null;
+            string sCacheParam = string.Empty;
+
+            if (bUseCache)
+            {
+                sCacheParam = StringHelper.MD5(sQuery);
+                if (Cache.Contains(new[] { sCacheParam }))
+                    dt = Cache.GetCache(new[] { sCacheParam }) as DataTable;
+            }
+            if (dt == null)
+            {
+                dt = this.DataConnector.SelectDataTable(sQuery, true);
+                if (bUseCache)
+                    Cache.SetCache(new[] { sCacheParam }, dt);
+            }
             if (Parser.IsDataTableNotEmpty(dt)) // fill the set
                 foreach (var dr in dt.Rows) yield return (T)Activator.CreateInstance(typeof(T), new[] { dr, this.DataConnector });
         }

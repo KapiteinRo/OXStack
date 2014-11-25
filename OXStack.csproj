@@ -53,6 +53,7 @@
     <Compile Include="Data\DataConnector.cs" />
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\Parser.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="IBaseBare.cs" />
     <Compile Include="RT\BaseRT.cs" />
     <Compile Include="RT\BaseRTEntity.cs" />

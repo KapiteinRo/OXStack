@@ -104,10 +104,7 @@ namespace OXStack.Data
         public SQLiteDataReader ExecuteReader(string sSQL)
         {
             // potentially very dangerous
-            using (SQLiteCommand cmd = new SQLiteCommand(sSQL, this.Connection))
-            {
-                return cmd.ExecuteReader();
-            }
+            return (new SQLiteCommand(sSQL, this.Connection)).ExecuteReader();
         }
 
         /// <summary>

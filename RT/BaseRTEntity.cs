@@ -29,7 +29,7 @@ namespace OXStack.RT
         /// Fill everything from datarow
         /// </summary>
         /// <param name="dr"></param>
-        private void _FillObject(DataRow dr)
+        protected void _FillObject(DataRow dr)
         {
             List<string> lsColumns = new List<string>(FetchColumnNames(dr));
             foreach (PropertyInfo info in this.GetType().GetProperties())
