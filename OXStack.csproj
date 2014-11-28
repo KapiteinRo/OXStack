@@ -47,6 +47,7 @@
     <Compile Include="BaseDisposable.cs" />
     <Compile Include="Config\ConfigHelper.cs" />
     <Compile Include="Config\IDataConnectorConfig.cs" />
+    <Compile Include="Config\IO\OXConfigFiles.cs" />
     <Compile Include="Config\Mappers\ConfigTypeAttribute.cs" />
     <Compile Include="Config\OXConfig.cs" />
     <Compile Include="Data\CachingHelper.cs" />
