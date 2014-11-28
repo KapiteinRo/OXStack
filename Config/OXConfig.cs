@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using OXStack.Config.IO;
 
 namespace OXStack.Config
@@ -41,8 +43,16 @@ namespace OXStack.Config
             {
                 // if OXConfig is not found in the executing directy, try this one:
                 if (!File.Exists(_sConfPath))
-                    _sConfPath = System.AppDomain.CurrentDomain.FriendlyName.Replace(".exe", string.Empty).Replace(".vshost", string.Empty) + ".xml";
-                // otherwise, look for OXStack.xml
+                    _sConfPath =
+                        AppDomain.CurrentDomain.FriendlyName.Replace(".exe", string.Empty)
+                            .Replace(".vshost", string.Empty) + ".xml";
+                if (!File.Exists(_sConfPath))
+                    _sConfPath =
+                        Assembly.GetExecutingAssembly()
+                            .GetName()
+                            .Name.Replace(".exe", string.Empty)
+                            .Replace(".vshost", string.Empty) + ".xml";
+                // otherwise, look for OXConfig.xml
                 if (!File.Exists(_sConfPath))
                     _sConfPath = Path.GetFileNameWithoutExtension(this.GetType().Assembly.Location) + ".xml";
                 return _sConfPath;
