@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
+﻿using System.Collections.Generic;
 using System.IO;
+using OXStack.Config.IO;
 
 namespace OXStack.Config
 {
@@ -26,22 +25,16 @@ namespace OXStack.Config
          *  BASIC CONFIGURATION FUNCTIONS..
          * 
          */
-        // dynamic config loading
-        private DateTime _dtLastChanged = DateTime.MinValue;
-        private XmlElement _xmlConf = null;
+        
+        // configurations
+        private OXConfigFiles _configFiles = null;
+        // property for configurations, will automatically load
+        private OXConfigFiles ConfigFiles { get { return _configFiles ?? (_configFiles = new OXConfigFiles(ConfPath)); } }
 
-        // config file, will automatically reload if something has changed..
-        private XmlElement XmlConfig
-        {
-            get
-            {
-                if (_xmlConf == null || HasConfigChanged()) LoadConfig();
-                return _xmlConf;
-            }
-        }
-
-        // path to config file
-        private string _sConfPath = "OXConfig.xml";
+        private string _sConfPath = "OXConfig.xml"; // default value
+        /// <summary>
+        /// Path to main config file.
+        /// </summary>
         public string ConfPath
         {
             get
@@ -62,35 +55,6 @@ namespace OXStack.Config
             // for dynamic config types..
         }
 
-        // check if configfile has changed..
-        private bool HasConfigChanged()
-        {
-            if (File.Exists(ConfPath))
-                if (File.GetLastWriteTime(ConfPath) != _dtLastChanged)
-                    return true;
-            return false;
-        }
-
-        // (re)load configfile...
-        private void LoadConfig()
-        {
-            if (File.Exists(ConfPath))
-            {
-                _dtLastChanged = File.GetLastWriteTime(ConfPath);
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(File.ReadAllText(ConfPath));
-                _xmlConf = xmlDoc.DocumentElement;
-            }
-            else
-            {
-                // create dummy
-                _dtLastChanged = DateTime.Now;
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml("<foo/>");
-                _xmlConf = xmlDoc.DocumentElement;
-            }
-        }
-
         /// <summary>
         /// Generic loading of the configuration
         /// </summary>
@@ -99,14 +63,30 @@ namespace OXStack.Config
         /// <returns></returns>
         public T Load<T>(ref T cfg) where T : ConfigHelper, new()
         {
+            return Load(ref cfg, "main");
+        }
+
+        /// <summary>
+        /// Generic loading of the configuration
+        /// </summary>
+        /// <typeparam name="T">Configuration class</typeparam>
+        /// <param name="cfg">Reference to private variables</param>
+        /// <param name="sConfigFile">path or name of configurationfile</param>
+        /// <returns></returns>
+        public T Load<T>(ref T cfg, string sConfigFile) where T : ConfigHelper, new()
+        {
             if (cfg == null)
                 cfg = new T()
-                          {
-                              DefaultStrings = new Dictionary<string, string>(),
-                              Node = this.XmlConfig.SelectSingleNode(typeof(T).Name)
-                          };
+                {
+                    DefaultStrings = new Dictionary<string, string>(),
+                    Node = ConfigFiles.Get(sConfigFile).SelectSingleNode(typeof (T).Name)
+                };
             if (cfg.HasExpired())
-                cfg = new T() { DefaultStrings = cfg.DefaultStrings, Node = this.XmlConfig.SelectSingleNode(typeof(T).Name) };
+                cfg = new T()
+                {
+                    DefaultStrings = cfg.DefaultStrings,
+                    Node = ConfigFiles.Get(sConfigFile).SelectSingleNode(typeof (T).Name)
+                };
             return cfg;
         }
 
@@ -116,7 +96,7 @@ namespace OXStack.Config
         /// <returns></returns>
         public bool TestConfig()
         {
-            return (File.Exists(ConfPath) && this.XmlConfig != null);
+            return (File.Exists(ConfPath) && ConfigFiles.Get("main") != null);
         }
 #endregion
 
